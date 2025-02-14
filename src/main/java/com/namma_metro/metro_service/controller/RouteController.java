@@ -6,7 +6,10 @@ import com.namma_metro.metro_service.service.RouteService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/routes")
@@ -32,5 +35,13 @@ public class RouteController {
     public ResponseEntity<ApiResponse> getAllRoutes() {
         List<Route> routes = routeService.getAllRoutes();
         return ResponseEntity.ok(new ApiResponse("Routes retrieved successfully", routes));
+    }
+    @PostMapping("/fare")
+    public ResponseEntity<ApiResponse> getFare(@RequestBody Map<String, UUID> request) {
+        UUID startStationId = request.get("startStationId");
+        UUID endStationId = request.get("endStationId");
+
+        BigDecimal fare = routeService.getFare(startStationId, endStationId);
+        return ResponseEntity.ok(new ApiResponse("Fare retrieved successfully", fare));
     }
 }

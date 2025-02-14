@@ -4,7 +4,10 @@ import com.namma_metro.metro_service.model.Route;
 import com.namma_metro.metro_service.repository.RouteRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class RouteService {
@@ -23,5 +26,14 @@ public class RouteService {
 
     public List<Route> getAllRoutes() {
         return routeRepository.findAll();
+    }
+    public BigDecimal getFare(UUID startStationId, UUID endStationId) {
+        Optional<Route> route = routeRepository.findByStartStationIdAndEndStationId(startStationId, endStationId);
+
+        if (route.isEmpty()) {
+            throw new RuntimeException("Route not found");
+        }
+
+        return route.get().getFare();
     }
 }
